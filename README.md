@@ -1,7 +1,3 @@
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
 ## Get started
 
 1. Install dependencies
@@ -15,7 +11,21 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    ```bash
    npx expo start
+   npm start
    ```
+
+- **Gestión Completa:** Posibilidad de reproducir y eliminar grabaciones de forma individual o masiva.
+
+## Documentación Detallada
+
+Para cumplir con los requisitos de la práctica, se han elaborado los siguientes documentos:
+
+1. [Diseño de la Pantalla](./docs/ejercicio1.txt)
+2. [Implementación Estructural](./docs/ejercicio2.txt)
+3. [Gestión de Permisos](./docs/ejercicio3.txt)
+4. [Recuperación de Audios (Persistencia)](./docs/ejercicio4.txt)
+5. [Componente de Carga (Spinners)](./docs/ejercicio5.txt)
+6. [Animaciones Personalizadas](./docs/ejercicio6.txt)
 
 In the output, you'll find options to open the app in a
 
