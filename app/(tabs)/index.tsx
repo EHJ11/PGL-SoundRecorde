@@ -1,4 +1,5 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
+import RecordButton from "@/components/RecordButton";
 import RecordingItem from "@/components/RecordingItem";
 import useAudioRecorderHook, { formatDuration } from "@/hooks/useAudioRecorder";
 import type { Recording } from "@/types";
@@ -82,31 +83,21 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.recordZone}>
-          <View style={styles.waveContainer}>
-            <View
-              style={[styles.wavePlaceholder, isRecording && styles.waveActive]}
-            />
-          </View>
           <Text
             style={[styles.timerText, isRecording && styles.timerTextActive]}
           >
             {formatDuration(recordingDuration)}
           </Text>
-          {isRecording && (
-            <Text style={styles.recordingStatus}>Grabando...</Text>
-          )}
 
-          <View style={styles.recordBtnWrapper}>
-            <TouchableOpacity
-              style={[styles.recordBtn, isRecording && styles.recordBtnActive]}
-              onPress={() => {
-                void handleRecordToggle();
-              }}
-              activeOpacity={0.85}
-            >
-              <View style={isRecording ? styles.stopIcon : styles.recIcon} />
-            </TouchableOpacity>
-          </View>
+          {isRecording && <LoadingSpinner label="Grabando..." />}
+
+          <RecordButton
+            isRecording={isRecording}
+            onPress={() => {
+              void handleRecordToggle();
+            }}
+          />
+
           <Text style={styles.recordHint}>
             {isRecording ? "Toca para parar" : "Toca para grabar"}
           </Text>
@@ -178,13 +169,6 @@ const styles = StyleSheet.create({
   },
   headerSub: { color: "#666", fontSize: 13 },
   recordZone: { alignItems: "center", paddingVertical: 24 },
-  waveContainer: { height: 60, justifyContent: "center", marginBottom: 8 },
-  wavePlaceholder: {
-    height: 60,
-    width: "100%",
-    borderRadius: 30,
-    backgroundColor: "#252532",
-  },
   timerText: {
     fontSize: 40,
     fontWeight: "200",
@@ -193,33 +177,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   timerTextActive: { color: "#FF6B6B" },
-  recordingStatus: {
-    color: "#FF6B6B",
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  waveActive: {
-    backgroundColor: "#FF6B6B22",
-  },
-  recordBtnWrapper: {
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: "#FF6B6B44",
-    padding: 6,
-    marginTop: 8,
-    marginBottom: 12,
-  },
-  recordBtn: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: "#FF6B6B",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  recordBtnActive: { backgroundColor: "#CC3333" },
-  recIcon: { width: 22, height: 22, borderRadius: 11, backgroundColor: "#fff" },
-  stopIcon: { width: 20, height: 20, borderRadius: 4, backgroundColor: "#fff" },
   recordHint: { color: "#555", fontSize: 13, letterSpacing: 0.5 },
   divider: {
     height: 1,

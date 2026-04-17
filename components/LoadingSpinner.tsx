@@ -1,15 +1,45 @@
 import type { LoadingSpinnerProps } from "@/types";
-import { StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { Animated, StyleSheet, Text, View } from "react-native";
 
 const DOT_SIZE = 12;
 const DOT_COLOR = "#FF6B6B";
 
+function AnimatedDot({ delay }: { delay: number }) {
+  const anim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.delay(delay),
+        Animated.timing(anim, {
+          toValue: -8,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.delay(600),
+      ]),
+    ).start();
+  }, []);
+
+  return (
+    <Animated.View
+      style={[styles.dot, { transform: [{ translateY: anim }] }]}
+    />
+  );
+}
+
 const LoadingSpinner = ({ label }: LoadingSpinnerProps) => (
   <View style={styles.container}>
     <View style={styles.row}>
-      <View style={styles.dot} />
-      <View style={styles.dot} />
-      <View style={styles.dot} />
+      <AnimatedDot delay={0} />
+      <AnimatedDot delay={150} />
+      <AnimatedDot delay={300} />
     </View>
     {label ? <Text style={styles.label}>{label}</Text> : null}
   </View>
