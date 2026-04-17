@@ -5,3 +5,7 @@ Se implementó un Servicio Genérico (storage.ts) para manejar la lectura y escr
 Al cargar la aplicación, un useEffect recupera las URIs de sesiones anteriores, permitiendo que el usuario vea sus audios previos inmediatamente
 
 1. [ Recuperación de audios en memoria](../assets/aplicacion-capturas/GrabacionGuardada.png)
+
+Aquí puede
+
+1. [ Recuperación de audios en memoria](../services/storage.ts)
