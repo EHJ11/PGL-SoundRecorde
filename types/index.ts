@@ -9,6 +9,7 @@ export type Recording = {
 export type RecordingItemProps = {
   recording: Recording;
   isPlaying: boolean;
+  playbackPosition?: number;
   onPlay: () => void;
   onDelete: () => void;
 };

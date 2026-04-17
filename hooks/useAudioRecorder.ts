@@ -21,6 +21,7 @@ type UseAudioRecorderReturn = {
   isRecording: boolean;
   recordingDuration: number;
   playingId: string | null;
+  playbackPosition: number;
   startRecording: () => Promise<boolean>;
   stopRecording: () => Promise<void>;
   playRecording: (recording: Recording) => void;
@@ -41,6 +42,8 @@ export default function useAudioRecorderHook(): UseAudioRecorderReturn {
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const [isLoadingRecordings, setIsLoadingRecordings] = useState(true);
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [playbackPosition, setPlaybackPosition] = useState(0);
+  const playbackTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const isRecording = recorderState?.isRecording ?? false;
   const recordingDuration = Math.round(
@@ -72,6 +75,10 @@ export default function useAudioRecorderHook(): UseAudioRecorderReturn {
 
     return () => {
       active = false;
+      if (playbackTimerRef.current) {
+        clearInterval(playbackTimerRef.current);
+        playbackTimerRef.current = null;
+      }
       if (audioPlayerRef.current) {
         audioPlayerRef.current.pause();
         audioPlayerRef.current.remove();
@@ -80,12 +87,23 @@ export default function useAudioRecorderHook(): UseAudioRecorderReturn {
     };
   }, []);
 
+  const clearPlaybackTimer = (): void => {
+    if (playbackTimerRef.current) {
+      clearInterval(playbackTimerRef.current);
+      playbackTimerRef.current = null;
+    }
+  };
+
   const stopCurrentPlayer = (): void => {
+    clearPlaybackTimer();
+
     if (audioPlayerRef.current) {
       audioPlayerRef.current.pause();
       audioPlayerRef.current.remove();
       audioPlayerRef.current = null;
     }
+
+    setPlaybackPosition(0);
   };
 
   const startRecording = async (): Promise<boolean> => {
@@ -158,6 +176,24 @@ export default function useAudioRecorderHook(): UseAudioRecorderReturn {
       audioPlayerRef.current = player;
       player.play();
       setPlayingId(recording.id);
+      setPlaybackPosition(0);
+
+      playbackTimerRef.current = setInterval(() => {
+        setPlaybackPosition((prev) => {
+          const next = prev + 1;
+          if (next >= recording.duration) {
+            clearPlaybackTimer();
+            if (audioPlayerRef.current) {
+              audioPlayerRef.current.pause();
+              audioPlayerRef.current.remove();
+              audioPlayerRef.current = null;
+            }
+            setPlayingId(null);
+            return recording.duration;
+          }
+          return next;
+        });
+      }, 1000);
     } catch (error) {
       console.error("Error playing recording:", error);
     }
@@ -188,6 +224,7 @@ export default function useAudioRecorderHook(): UseAudioRecorderReturn {
     isRecording,
     recordingDuration,
     playingId,
+    playbackPosition,
     startRecording,
     stopRecording,
     playRecording,

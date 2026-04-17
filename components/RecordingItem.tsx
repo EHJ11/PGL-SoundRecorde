@@ -1,10 +1,11 @@
 import { formatDuration } from "@/hooks/useAudioRecorder";
 import type { RecordingItemProps } from "@/types";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const RecordingItem = ({
   recording,
   isPlaying,
+  playbackPosition,
   onPlay,
   onDelete,
 }: RecordingItemProps) => {
@@ -16,6 +17,14 @@ const RecordingItem = ({
     minute: "2-digit",
   });
 
+  const actionIcon = isPlaying
+    ? require("../assets/images/pause.png")
+    : require("../assets/images/start.png");
+
+  const displayedDuration = isPlaying
+    ? formatDuration(playbackPosition ?? 0)
+    : formatDuration(recording.duration);
+
   return (
     <View style={[styles.container, isPlaying && styles.containerPlaying]}>
       {isPlaying && <View style={styles.playingIndicator} />}
@@ -24,7 +33,7 @@ const RecordingItem = ({
           {recording.name}
         </Text>
         <Text style={styles.meta}>
-          {dateStr} · {formatDuration(recording.duration)}
+          {dateStr} · {displayedDuration}
         </Text>
       </View>
       <TouchableOpacity
@@ -32,7 +41,11 @@ const RecordingItem = ({
         onPress={onPlay}
         activeOpacity={0.7}
       >
-        <Text style={styles.actionBtnText}>{isPlaying ? "⏸" : "▶"}</Text>
+        <Image
+          source={actionIcon}
+          style={styles.actionBtnIcon}
+          resizeMode="contain"
+        />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.deleteBtn}
@@ -101,9 +114,9 @@ const styles = StyleSheet.create({
   actionBtnActive: {
     backgroundColor: "#FF6B6B22",
   },
-  actionBtnText: {
-    fontSize: 14,
-    color: "#FF6B6B",
+  actionBtnIcon: {
+    width: 20,
+    height: 20,
   },
   deleteBtn: {
     width: 32,

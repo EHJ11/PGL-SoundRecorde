@@ -20,6 +20,7 @@ export default function HomeScreen() {
     isRecording,
     recordingDuration,
     playingId,
+    playbackPosition,
     startRecording,
     stopRecording,
     playRecording,
@@ -143,6 +144,7 @@ export default function HomeScreen() {
                 key={rec.id}
                 recording={rec}
                 isPlaying={playingId === rec.id}
+                playbackPosition={playingId === rec.id ? playbackPosition : 0}
                 onPlay={() => {
                   playRecording(rec);
                 }}
