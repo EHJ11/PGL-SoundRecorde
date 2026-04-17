@@ -1,5 +1,9 @@
 # 1. Diseño de la Pantalla
 
+Este es el boceto inicial del proyecto, aquí podrá ver la primera idea que tuve y después con la otra captura podrá comparar el cambio que hubo:
+
+1. [Diseño de la Pantalla](../assets/aplicacion-capturas/Boceto-Inicial.png)
+
 Decidí crear una pantalla con el fondo negro, teniendo el boton de grabar y cuanto esta durando la grabación en la parte de arriba de la pantalla.
 
 En la parte del medio de la pantalla se puede ver las grabaciones que hay y si no hay se muestra un texto que pone
